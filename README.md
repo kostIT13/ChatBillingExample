@@ -5,4 +5,35 @@
 Этот репозиторий содержит пример кода для реализации чат-системы с функцией биллинга. Проект создан в учебных или демонстрационных целях.
 
 
+## ⚙️ Установка и запуск
+
+### Вариант 1: Используя pip и requirements.txt
+1.  **Клонируйте репозиторий:**
+    ```bash
+    git clone https://github.com/kostIT13/ChatBillingExample.git
+    cd ChatBillingExample
+    ```
+2.  **Установите зависимости:**
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+### Вариант 2: Используя uv (рекомендуется)
+1.  **Клонируйте репозиторий:**
+    ```bash
+    git clone https://github.com/kostIT13/ChatBillingExample.git
+    cd ChatBillingExample
+    ```
+2.  **Установите `uv`** (если не установлен): [Инструкция на сайте uv](https://docs.astral.sh/uv/)
+3.  **Синхронизируйте окружение:**
+    ```bash
+    uv sync
+    ```
+
+**Запуск проекта:**
+После установки зависимостей запустите основной скрипт из папки `src`. Например:
+```bash
+python src/main.py
+
+
 
