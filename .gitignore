@@ -13,3 +13,5 @@ secret.txt
 *.go
 temp/
 [cr]at.exe
+
+.env
