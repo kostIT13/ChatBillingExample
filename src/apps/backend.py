@@ -6,6 +6,7 @@ from contextlib import asynccontextmanager
 from pathlib import Path 
 from src.database import Base, engine
 from src.models.chat import Chat
+from src.models.user import User
 
 
 @asynccontextmanager
