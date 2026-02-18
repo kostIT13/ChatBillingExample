@@ -1,17 +1,12 @@
-version: '3.8'
-
 services:
   backend:
     build: .
     container_name: myapp_backend
-    command: uvicorn backend:app --host 0.0.0.0 --port 8000 --reload  # 👈 Изменил main.py на backend.py
+    command: uvicorn src.apps.backend.backend:app --host 0.0.0.0 --port 8000 --reload
     ports:
       - "8000:8000"
     volumes:
-      - ./src:/src  
-      - ./models:/models  
-      - ./apps:/apps
-      - ./backend.py:/backend.py  # 👈 Добавьте backend.py в volumes
+      - ./src:/app/src  # Монтируем всю папку src
     environment:
       - DATABASE_URL=postgresql+asyncpg://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
     depends_on:
