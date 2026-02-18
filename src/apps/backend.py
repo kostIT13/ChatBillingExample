@@ -5,7 +5,7 @@ from src.api.chat.endpoints import router as chat_router
 from contextlib import asynccontextmanager
 from pathlib import Path 
 from src.database import Base, engine
-from src.models.user import User 
+from src.models.chat import Chat
 
 
 @asynccontextmanager
