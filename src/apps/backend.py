@@ -1,5 +1,6 @@
 import sys
 import os
+import logging
 from fastapi import FastAPI
 from src.api.auth.endpoints import router as auth_router 
 from src.api.chat.endpoints import router as chat_router
@@ -9,20 +10,22 @@ from src.apps.database import Base, engine
 from src.models import User, Chat
 
 
+logger = logging.getLogger(__name__)
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     try:
-        print("Создание таблиц")
+        logger.info("Создание таблиц")
         async with engine.begin() as conn:
             await conn.run_sync(Base.metadata.create_all)
-        print("База данных готова к работе")
+        logger.info("База данных готова к работе")
     except Exception as e:
-        print(f"Ошибка при создании таблиц: {e}")
+        logger.exception("Ошибка при создании таблиц")
         raise e
     
     yield
     
-    print("Выключение сервера")
+    logger.info("Выключение сервера")
 
 app = FastAPI(lifespan=lifespan)
 
