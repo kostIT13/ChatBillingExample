@@ -1,6 +1,9 @@
-from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
-from sqlalchemy.orm import sessionmaker, declarative_base
+from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
+from sqlalchemy.orm import MappedAsDataclass, DeclarativeBase
+from typing import Annotated
+from fastapi import Depends
 import os
+
 
 POSTGRES_USER = os.getenv("POSTGRES_USER", "user")
 POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD", "pass")
@@ -10,21 +13,16 @@ POSTGRES_DB = os.getenv("POSTGRES_DB", "mydb")
 
 DATABASE_URL = f"postgresql+asyncpg://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:5432/{POSTGRES_DB}"
 
-print(f"Подключение к БД: postgresql+asyncpg://{POSTGRES_USER}:****@{POSTGRES_HOST}:5432/{POSTGRES_DB}")
 
-engine = create_async_engine(DATABASE_URL, echo=True)
+engine = create_async_engine(DATABASE_URL)
 
-AsyncSessionLocal = sessionmaker(
-    engine, 
-    class_=AsyncSession,
-    expire_on_commit=False
-)
+new_session = async_sessionmaker(engine, expire_on_commit=False)
 
-Base = declarative_base()
+class Base(MappedAsDataclass, DeclarativeBase):
+    pass
 
 async def get_db():
-    async with AsyncSessionLocal() as session:
-        try:
-            yield session
-        finally:
-            await session.close()
+    async with new_session() as session:
+        yield session
+    
+SessionDep = Annotated[AsyncSession, Depends(get_db)]

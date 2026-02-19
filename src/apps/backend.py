@@ -1,5 +1,3 @@
-import sys
-import os
 from fastapi import FastAPI
 from src.api.auth.endpoints import router as auth_router 
 from src.api.chat.endpoints import router as chat_router
@@ -12,23 +10,12 @@ from src.models.chat import Chat
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    print("Создание таблиц базы данных...")
-    
-    tables = Base.metadata.tables.keys()
-    print(f"Таблицы для создания: {list(tables)}")
-    
-    try:
-        async with engine.begin() as conn:
-            await conn.run_sync(Base.metadata.create_all)
-        print("Таблицы успешно созданы")
-    except Exception as e:
-        print(f"Ошибка при создании таблиц: {e}")
-        raise e 
-    
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+
+    print("База данных готова к работе")
     yield
-    
-    print("Остановка приложения...")
-    await engine.dispose()
+    print("Выключение сервера")
 
 app = FastAPI(lifespan=lifespan)
 

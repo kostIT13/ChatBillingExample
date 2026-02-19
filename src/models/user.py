@@ -1,9 +1,8 @@
-from sqlalchemy import Column, Integer, String
-from src.database import Base
+from sqlalchemy.orm import Mapped, mapped_column
+from database import Base
 
-class User(Base):
+class BooksModel(Base):
     __tablename__ = "users"
-    
-    id = Column(Integer, primary_key=True, index=True)
-    name = Column(String)
-    email = Column(String, unique=True)
+
+    id: Mapped[int] = mapped_column(primary_key=True, init=False)
+    title: Mapped[str]
