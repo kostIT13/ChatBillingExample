@@ -12,19 +12,21 @@ from src.models.chat import Chat
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-
-    if os.getenv("ENVIRONMENT", "development") == "development":
-        print("Создание таблиц базы данных...")
-        
-        tables = Base.metadata.tables.keys()
-        print(f"Таблицы для создания: {list(tables)}")
-        
+    print("Создание таблиц базы данных...")
+    
+    tables = Base.metadata.tables.keys()
+    print(f"Таблицы для создания: {list(tables)}")
+    
+    try:
         async with engine.begin() as conn:
             await conn.run_sync(Base.metadata.create_all)
         print("Таблицы успешно созданы")
+    except Exception as e:
+        print(f"Ошибка при создании таблиц: {e}")
+        raise e 
     
-    yield 
-
+    yield
+    
     print("Остановка приложения...")
     await engine.dispose()
 
