@@ -1,5 +1,5 @@
 from uuid import uuid4
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 from src.services.auth.userdto import UserDTO
 from typing import Optional
 
@@ -33,6 +33,13 @@ class RegisterRequest(BaseModel):
     username: str = Field(examples=["admin"])
     password: str = Field(examples=["admin"])
     email: Optional[str] = Field(default=None, examples=["admin@example.com"])
+
+    @field_validator('password')
+    @classmethod
+    def validate_password_length(cls, v: str) -> str:
+        if len(v.encode('utf-8')) > 72:
+            raise ValueError('Пароль не может быть длиннее 72 байт')
+        return v
 
 
 class UserResponseSchema(BaseModel):
