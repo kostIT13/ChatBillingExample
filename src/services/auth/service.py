@@ -1,12 +1,12 @@
+import bcrypt
 from typing import Optional
 from uuid import uuid4
-from passlib.context import CryptContext
 from src.services.auth.base import BaseAuthService, UserRepository
 from src.services.auth.userdto import UserDTO
 
 
 class AuthService(BaseAuthService):
-    _pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
 
     def __init__(self, user_repository: UserRepository):
         self._user_repository = user_repository
@@ -18,8 +18,9 @@ class AuthService(BaseAuthService):
                 return user
         return None
 
-    async def register(self, name: str, username: str, password: str) -> UserDTO:
+    async def register(self, name: str, username: str, password: str, email: str) -> UserDTO:
         user_id = str(uuid4())
+
         hashed_password = self._hash_password(password)
         user = UserDTO(
             id=user_id,
@@ -31,13 +32,20 @@ class AuthService(BaseAuthService):
         return user
 
     async def get_user_by_id(self, user_id: str) -> Optional[UserDTO]:
-        user = await self._user_repository.get_one(user_id)
-        return user
+        return await self._user_repository.get_one(user_id)
 
-    @classmethod
-    def _hash_password(cls, password: str) -> str:
-        return cls._pwd_context.hash(password)
+    @staticmethod
+    def _hash_password(password: str) -> str:
+        salt = bcrypt.gensalt(rounds=12)
+        hashed = bcrypt.hashpw(password.encode('utf-8'), salt)
+        return hashed.decode('utf-8')
 
-    @classmethod
-    def _verify_password(cls, password: str, hashed_password: str) -> bool:
-        return cls._pwd_context.verify(password, hashed_password)
+    @staticmethod
+    def _verify_password(password: str, hashed_password: str) -> bool:
+        try:
+            return bcrypt.checkpw(
+                password.encode('utf-8'),
+                hashed_password.encode('utf-8')
+            )
+        except (ValueError, TypeError):
+            return False

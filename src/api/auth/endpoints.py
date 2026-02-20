@@ -1,3 +1,4 @@
+import logging
 from fastapi import APIRouter, Body, status 
 from fastapi.responses import JSONResponse
 from src.api.auth.dependencies import AuthServiceDependency, CurrentUserDependency
@@ -19,23 +20,37 @@ async def login(service: AuthServiceDependency, data: LoginRequest = Body()) -> 
     return LoginResponse.from_dto(user)
 
 
-@router.post("/register", response_model=SuccessResponse)
-async def register(service: AuthServiceDependency, data: RegisterRequest = Body()) -> JSONResponse | SuccessResponse:
+@router.post("/register")
+async def register(
+    service: AuthServiceDependency,
+    data: RegisterRequest = Body()
+) -> JSONResponse:
     try:
         user = await service.register(
             name=data.name,
             username=data.username,
-            password=data.password
+            password=data.password,
+            email=data.email
         )
         return JSONResponse(
             content=SuccessResponse(message=f"Пользователь {user.name} успешно создан").model_dump(),
             status_code=status.HTTP_201_CREATED
         )
     except ValueError as e:
-        return JSONResponse(
-            content=ErrorResponse(message=str(e)).model_dump(),
-            status_code=status.HTTP_409_CONFLICT
-        )
+        error_msg = str(e)
+
+        if "уже существует" in error_msg or "username" in error_msg.lower() or "email" in error_msg.lower():
+            return JSONResponse(
+                content=ErrorResponse(message=error_msg).model_dump(),
+                status_code=status.HTTP_409_CONFLICT
+            )
+
+        else:
+            logging.error(f"Registration error: {error_msg}")
+            return JSONResponse(
+                content=ErrorResponse(message="Внутренняя ошибка сервера").model_dump(),
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
 
 @router.get("/me", response_model=UserResponseSchema)

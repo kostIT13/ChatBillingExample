@@ -20,7 +20,7 @@ class SQLAlchemyUserRepository(UserRepository):
         )
 
     async def get_one(self, user_id: str) -> Optional[UserDTO]:
-        query = select(User).where(user_id==user_id)
+        query = select(User).where(User.id==user_id)
         result = await self.session.execute(query)
         db_user = result.scalar_one_or_none()
         return self._to_dto(db_user) if db_user else None 

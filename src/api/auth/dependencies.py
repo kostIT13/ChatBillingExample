@@ -6,10 +6,11 @@ from src.services.auth.service import AuthService
 from src.services.auth.repositories.in_memory import InMemoryUserRepository
 from sqlalchemy.ext.asyncio import AsyncSession
 from src.apps.database.database import get_db
+from src.services.auth.repositories.repository import SQLAlchemyUserRepository
 
 
-def get_user_repo() -> UserRepository:
-    return InMemoryUserRepository()
+def get_user_repo(session: AsyncSession = Depends(get_db)) -> UserRepository:
+    return SQLAlchemyUserRepository(session)
 
 
 def get_auth_service(
