@@ -1,10 +1,8 @@
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from src.apps.database import Base
+from src.apps.database.database import Base
 from sqlalchemy import Integer, ForeignKey, Float, Enum, String, DateTime
 import enum 
 from datetime import datetime
-
-
 
 
 class TransactionType(str, enum.Enum):

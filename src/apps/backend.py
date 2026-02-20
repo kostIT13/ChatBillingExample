@@ -6,8 +6,9 @@ from src.api.auth.endpoints import router as auth_router
 from src.api.chat.endpoints import router as chat_router
 from contextlib import asynccontextmanager
 from pathlib import Path 
-from src.apps.database import Base, engine
-from src.models import User, Chat
+from src.apps.database.database import Base, engine
+from src.apps.database.models.user import User
+from src.apps.database.models.chat import Chat
 
 
 logger = logging.getLogger(__name__)

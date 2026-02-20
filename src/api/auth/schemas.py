@@ -1,6 +1,6 @@
 from uuid import uuid4
 from pydantic import BaseModel, Field
-from src.services.auth import UserDTO
+from src.services.auth.userdto import UserDTO
 
 
 class LoginRequest(BaseModel):

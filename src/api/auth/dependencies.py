@@ -1,6 +1,11 @@
 from typing import Optional, Annotated
 from fastapi import Header, Depends
-from src.services.auth import UserRepository, InMemoryUserRepository, BaseAuthService, AuthService, UserDTO
+from src.services.auth.base import UserRepository, BaseAuthService
+from src.services.auth.userdto import UserDTO
+from src.services.auth.service import AuthService
+from src.services.auth.repositories.in_memory import InMemoryUserRepository
+from sqlalchemy.ext.asyncio import AsyncSession
+from src.apps.database.database import get_db
 
 
 def get_user_repo() -> UserRepository:
@@ -19,7 +24,7 @@ async def get_current_user(
 ) -> Optional[UserDTO]:
     if not user_id:
         return None
-    user = await auth_service.getuv_user_by_id(user_id)
+    user = await auth_service.get_user_by_id(user_id)
     return user
 
 
