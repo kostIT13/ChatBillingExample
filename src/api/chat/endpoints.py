@@ -32,7 +32,7 @@ async def handle_user_message(
     answer = await llm_service.execute(text=data.text, history=[(m.role, m.text) for m in history])
     await message_service.create_message("human", data.text, chat_id)
     await message_service.create_message("assistant", answer.text, chat_id)
-    await billing_service.create_transaction(user.id, "chat", -1 * answer.used_tokens)
+    await billing_service.create_transaction(user.id, "chat", answer.used_tokens)
     return JSONResponse(content=NewMessageResponse.from_dto(answer).model_dump(), status_code=status.HTTP_200_OK)
 
 
@@ -49,8 +49,8 @@ async def top_up_user_balance(
             content = ErrorResponse(message="Пользователь не существует").model_dump(),
             status_code = status.HTTP_404_NOT_FOUND
         )
-    await billing_service.create_trannsaction(user.id, "top_up", data.value)
+    await billing_service.create_transaction(user.id, "top_up", data.value)
     return JSONResponse(
-        content=SuccessResponse(content="Успешное пополнение").model_dump,
+        content=SuccessResponse(content="Успешное пополнение").model_dump(),
         status_code= status.HTTP_201_CREATED    
     )

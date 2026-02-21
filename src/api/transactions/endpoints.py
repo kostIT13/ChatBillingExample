@@ -1,9 +1,9 @@
 from fastapi import APIRouter, status, Body, Query
 from fastapi.responses import JSONResponse
 from typing import Optional
-from src.api.transaction.schemas import BalanceResponse, TransactionResponse, TopUpRequest, TransactionHistoryQuery
+from src.api.transactions.schemas import BalanceResponse, TransactionResponse, TopUpRequest, TransactionHistoryQuery
 from src.api.auth.dependencies import CurrentUserDependency
-from src.api.transaction.dependencies import BillingServiceDependency
+from src.api.transactions.dependencies import BillingServiceDependency
 from src.api.general_schemas import ErrorResponse, SuccessResponse
 
 
