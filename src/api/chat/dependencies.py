@@ -1,21 +1,21 @@
 from fastapi import Depends
 from typing import Annotated
-from src.services.billing.base import BaseBillingService,  TransactionRepository
 from src.services.llm import OllamaLLMService, LLMService
 from src.services.billing.service import BillingService
-from src.services.billing.repositories.in_memory import InMemoryTransactionRepository
 import os
 from dotenv import load_dotenv
-from src.api.transactions.dependencies import BillingServiceDependency
-from src.services.message.repositories.in_memory import InMemoryMessageRepository
 from src.services.message.base import MessageRepository, BaseMessageService
 from src.services.message.service import MessageService
+from src.services.message.repositories.repository import SQLAlchemyMessageRepository
+from src.apps.database.database import get_db
+from sqlalchemy.ext.asyncio import AsyncSession
+from src.api.transactions.dependencies import BillingServiceDependency
 
 
 load_dotenv()
 
-def get_message_repo() -> MessageRepository:
-    return InMemoryMessageRepository()
+def get_message_repo(session: AsyncSession = Depends(get_db)) -> MessageRepository:
+    return SQLAlchemyMessageRepository(session)
 
 
 def get_message_service(message_repo: MessageRepository = Depends(get_message_repo)) -> BaseMessageService:
