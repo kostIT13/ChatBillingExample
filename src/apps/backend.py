@@ -10,6 +10,8 @@ from src.apps.database.database import Base, engine
 from src.apps.database.models.user import User
 from src.apps.database.models.chat import Chat
 from src.apps.database.models.transactions import Transaction
+from src.apps.database.models.message import Message
+from src.api.transactions.endpoints import router as trans_router
 
 
 logger = logging.getLogger(__name__)
@@ -33,3 +35,4 @@ app = FastAPI(lifespan=lifespan)
 
 app.include_router(router=auth_router, prefix='/api/v1')
 app.include_router(router=chat_router, prefix='/api/v1')
+app.include_router(router=trans_router, prefix='/api/v1')
