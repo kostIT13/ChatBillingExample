@@ -22,13 +22,6 @@ class SQLAlchemyTransactionRepository(TransactionRepository):
         )
     
     
-    async def get_one(self, user_id: str) -> Optional[TransactionDTO]:
-        query = select(Transaction).where(Transaction.id==user_id)
-        result = await self.session.execute(query)
-        db_user = result.scalar_one_or_none()
-        return self._to_dto(db_user) if db_user else None 
-    
-
     async def get_all(self, **filters) -> List[TransactionDTO]:
         query = select(Transaction)
         if 'user_id' in filters:
