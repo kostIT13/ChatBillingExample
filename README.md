@@ -39,7 +39,9 @@ python src/main.py
 ## 🛠 Стек технологий
 *   **Язык:** Python 100%
 *   **Менеджеры пакетов:** Поддерживается установка через `pip` (`requirements.txt`) и `uv` (`uv.lock`, `pyproject.toml`).
-* **Фреймворки:** LangChain, FastAPI, Pydantic, PostgreSQL, SQLAlchemy, Langchain
+* **Фреймворки:** LangChain, FastAPI, Pydantic, PostgreSQL, SQLAlchemy, Chainlit
+  
+
 
 
 
