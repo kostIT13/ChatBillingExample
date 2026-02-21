@@ -9,6 +9,7 @@ from pathlib import Path
 from src.apps.database.database import Base, engine
 from src.apps.database.models.user import User
 from src.apps.database.models.chat import Chat
+from src.apps.database.models.transactions import Transaction
 
 
 logger = logging.getLogger(__name__)

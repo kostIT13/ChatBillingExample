@@ -15,7 +15,7 @@ class Transaction(Base):
     __tablename__ = "transactions"
 
     id: Mapped[str] = mapped_column(String(36), primary_key=True, index=True)
-    user_id: Mapped[str] = mapped_column(Integer, ForeignKey("users.id"), nullable=False)
+    user_id: Mapped[str] = mapped_column(String(36), ForeignKey("users.id"), nullable=False, index=False)
     amount: Mapped[int] = mapped_column(Integer, nullable=False)
     transaction_type: Mapped[TransactionType] = mapped_column(Enum(TransactionType), nullable=False)
     description: Mapped[str] = mapped_column(String(255), nullable=True)

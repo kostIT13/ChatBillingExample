@@ -1,8 +1,10 @@
 from fastapi import Depends
 from typing import Annotated
 from src.services.message import InMemoryMessageRepository, MessageService, MessageRepository, BaseMessageService
-from src.services.billing import InMemoryTransactionRepository, BaseBillingService, BillingService, TransactionRepository
+from src.services.billing.base import BaseBillingService,  TransactionRepository
 from src.services.llm import OllamaLLMService, LLMService
+from src.services.billing.service import BillingService
+from src.services.billing.repositories.in_memory import InMemoryTransactionRepository
 
 
 def get_message_repo() -> MessageRepository:
