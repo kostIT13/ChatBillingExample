@@ -16,7 +16,7 @@ class SQLAlchemyTransactionRepository(TransactionRepository):
         return TransactionDTO(
             id=db_trans.id,
             user_id=str(db_trans.user_id),
-            transaction_type=db_trans.transaction_type,
+            transaction_type=db_trans.transaction_type.value,
             value=db_trans.amount,
             created_at=db_trans.created_at
         )
@@ -27,7 +27,7 @@ class SQLAlchemyTransactionRepository(TransactionRepository):
         if 'user_id' in filters:
             query = query.where(Transaction.user_id == int(filters['user_id']))
         if 'transaction_type' in filters:
-            query = query.where(Transaction.transaction_type == filters['transaction_type'])  
+            query = query.where(Transaction.transaction_type == TransactionType(filters['transaction_type']))  
         query = query.order_by(desc(Transaction.created_at))
         result = await self.session.execute(query)
         return [self._to_dto(t) for t in result.scalars().all()]  
