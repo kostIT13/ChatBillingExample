@@ -26,6 +26,7 @@ class AuthService(BaseAuthService):
             id=user_id,
             name=name,
             username=username,
+            email=email,
             hashed_password=hashed_password
         )
         await self._user_repository.add_one(user)

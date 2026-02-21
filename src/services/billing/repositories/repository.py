@@ -25,7 +25,7 @@ class SQLAlchemyTransactionRepository(TransactionRepository):
     async def get_all(self, **filters) -> List[TransactionDTO]:
         query = select(Transaction)
         if 'user_id' in filters:
-            query = query.where(Transaction.user_id == int(filters['user_id']))
+            query = query.where(Transaction.user_id == filters['user_id'])
         if 'transaction_type' in filters:
             query = query.where(Transaction.transaction_type == TransactionType(filters['transaction_type']))  
         query = query.order_by(desc(Transaction.created_at))

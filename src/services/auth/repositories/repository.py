@@ -16,6 +16,7 @@ class SQLAlchemyUserRepository(UserRepository):
             id=str(db_user.id),
             name=db_user.name,
             username=db_user.username,
+            email=db_user.email,
             hashed_password=db_user.password_hash
         )
 
@@ -39,6 +40,7 @@ class SQLAlchemyUserRepository(UserRepository):
             id=data.id,
             name=data.name,
             username=data.username,
+            email=data.email,
             password_hash=data.hashed_password
         )
         try:
