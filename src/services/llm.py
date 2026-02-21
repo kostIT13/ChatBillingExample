@@ -32,7 +32,6 @@ class LLMService(ABC):
         raise NotImplementedError 
     
 
-
 class OllamaLLMService(LLMService):
     _MESSAGE = [
         ("system", "You are friendly assistant"),

@@ -58,16 +58,15 @@ class InMemoryMessageRepository(MessageRepository):
 class BaseMessageService(ABC):
 
     @abstractmethod
-    async def get_history(self, chat_id: str, size: int = 20) -> list[MessageDTO]:
+    async def get_chat_history(self, chat_id: str, size: int = 20) -> list[MessageDTO]:
         raise NotImplemented
     
     @abstractmethod
-    async def get_history(self, role: Literal["assistant", "human"], text: str, chat_id: str) -> MessageDTO:
+    async def find_message(self, role: Literal["assistant", "human"], text: str, chat_id: str) -> MessageDTO:
         raise NotImplemented
     
 
 class MessageService(BaseMessageService):
-
     def __init__(self, message_repo: MessageRepository):
         self._message_repo = message_repo
 
